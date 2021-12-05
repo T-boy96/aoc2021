@@ -172,7 +172,7 @@ vector<Board> storeBoards(ifstream* input) {
     res.push_back(b);
     return res;
 }
-void part1(){
+void parts(){
     ifstream input("./input.txt");
     if(input.fail()) return;
 
@@ -258,7 +258,7 @@ void part1(){
 }
 
 int main(){
-    part1(); //switch from P1 to P2 comments to get part2.
+    parts(); //switch from P1 to P2 comments to get the desired part.
     
     return 0;
 }
