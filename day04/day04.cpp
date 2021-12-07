@@ -4,6 +4,8 @@
 #include <vector>
 using namespace std;
 
+#define INPUT "./input.txt"
+
 //P1/P2 COMMENTS (can be found at lines 202..240):
 //P1: remove line comment for pt1
 //     & add line comment for pt2
@@ -172,8 +174,9 @@ vector<Board> storeBoards(ifstream* input) {
     res.push_back(b);
     return res;
 }
-void parts(){
-    ifstream input("./input.txt");
+
+void part1(){
+    ifstream input(INPUT);
     if(input.fail()) return;
 
     vector<int> guesses;
@@ -181,68 +184,29 @@ void parts(){
 
     vector<Board> boards;
     boards = storeBoards(&input);
-
-    //-----------COUT-----------
-    // for(int g : guesses){
-    //     cout << " " << g;
-    // }
-    // cout << endl;
-
-    // for(Board b : boards){
-    //     b.toString();
-    //     cout << "~~~~~~~~~~~~~~~~~~~~" << endl;
-    // }
-    //-----------COUT-----------
-
     
     int round = 1;
     int n;
     Board w;
 
-    //P1
-    // bool winner = false;
-    // while(!winner){
-    //
-    //P2
-    while(boards.size() > 0){
-        cout << endl;
+    bool winner = false;
+    while(!winner){
         n = guesses[round-1];
-        cout << "\nGUESS: " << n << endl;
-        for(int g : guesses){
-            if(g == n) cout << " " << '<' << g << '>';
-            else cout << " " << g;
-        }
-        cout << endl;
-        
         int b = 0;
         while(b < boards.size()){
             boards[b].setNumMarked(n);
-            boards[b].toString();
 
             if(boards[b].wonGame()){
-                //P1
-                // w = boards[b];
-                // winner = true;
-                //
-
-                //P2
-                cout << "BOARD " << boards[b].getID() << " can now be erased." << endl;
                 w = boards[b];
-                boards.erase(boards.begin()+b);
-                b--;
-                //
-
+                winner = true;
             }
             b++;
         }
         round++;
     }
-
-    //P1
-    // cout << "\n\nBINGO!!! THE WINNER IS ";
-    //P2
-    cout << "\n\nTHE VERY LAST WINNER BOARD IS ";
     
+    cout << "---------part1---------" <<endl;
+    cout << "BINGO!!!! THE WINNER IS ";
     w.toString();
     
     int sum = 0;
@@ -252,13 +216,61 @@ void parts(){
         }
     }
     cout << "Sum of all unmarked numbers: " << sum << endl;
-    cout << "FINAL SCORE: " << sum * n << endl;
+    cout << "Last number called: " << n << endl;
+    cout << "FINAL SCORE: " << sum << "*" << n << "=" << sum * n << endl;
+
+    input.close();
+}
+
+void part2(){
+    ifstream input(INPUT);
+    if(input.fail()) return;
+
+    vector<int> guesses;
+    guesses = storeFirstLine(&input);
+
+    vector<Board> boards;
+    boards = storeBoards(&input);
+
+    int round = 1;
+    int n;
+    Board w;
+
+    while(boards.size() > 0){
+        n = guesses[round-1];
+        int b = 0;
+        while(b < boards.size()){
+            boards[b].setNumMarked(n);
+
+            if(boards[b].wonGame()){
+                w = boards[b];
+                boards.erase(boards.begin()+b);
+                b--;
+            }
+            b++;
+        }
+        round++;
+    }
+
+    cout << "------------part2------------" << endl;
+    cout << "THE VERY LAST WINNER BOARD IS ";
+    w.toString();
+    
+    int sum = 0;
+    for(int i = 0; i < 5; i++){
+        for(int j = 0; j < 5; j++){
+            if(!w.isNumMarked(i,j)) sum += w.getValue(i,j);
+        }
+    }
+    cout << "Sum of all unmarked numbers: " << sum << endl;
+    cout << "Last number called: " << n << endl;
+    cout << "FINAL SCORE: " << sum << "*" << n << "=" << sum * n << endl;
 
     input.close();
 }
 
 int main(){
-    parts(); //switch from P1 to P2 comments to get the desired part.
-    
+    part1();
+    part2();
     return 0;
 }
