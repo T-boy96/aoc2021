@@ -7,10 +7,11 @@ using namespace std;
 
 // NOTE:
 // - It creates a map.csv file
-// - The codes between '//P2' and '//' belong to 'part2',
-//   comment them out if you only want to see 'part1' result
 // - SIZE value is 10 for sample input (which is input1.txt)
+// - INPUT: path to desired input
+
 #define SIZE 1000
+#define INPUT "./input.txt"
 
 class Ventline{
 private:
@@ -125,8 +126,9 @@ void diagRestVentLine(int m[SIZE][SIZE], int x1,int y1,int x2,int y2){
     }
 }
 
-void parts() {
-    ifstream input("./input.txt");
+void part1() {
+    ifstream input(INPUT);
+    if(input.fail()) return;
     string line;
 
     vector<Ventline> ventlines;
@@ -137,6 +139,7 @@ void parts() {
         Ventline v = Ventline(x1,y1,x2,y2);
         ventlines.push_back(v);
     }
+    input.close();
 
     memset(&map,0,sizeof(int)*SIZE*SIZE);
     
@@ -161,15 +164,37 @@ void parts() {
         }
     }
     cout << "part1: " << count << endl;
+}
 
-    //P2
+void part2() {
+    ifstream input(INPUT);
+    if(input.fail()) return;
+
+    string line;
+    vector<Ventline> ventlines;
+    while(getline(input,line)){
+        int x1,y1,x2,y2;
+        fromline(&x1,&y1,&x2,&y2, line);
+
+        Ventline v = Ventline(x1,y1,x2,y2);
+        ventlines.push_back(v);
+    }
+    input.close();
+
+    memset(&map,0,sizeof(int)*SIZE*SIZE);
+    
     for(Ventline v : ventlines){
         int x1 = v.start().getX();
         int y1 = v.start().getY();
         int x2 = v.end().getX();
         int y2 = v.end().getY();
         
-        if(x1 == x2 || y1 == y2) continue;
+        if (x1 == x2) {
+            verticalVentLine(map, x1,y1,y2);
+        }
+        else if (y1 == y2) {
+            horizontalVentLine(map, y1, x1,x2);
+        }
         else if(x1 == y1 && x2 == y2){
             diagDownVentLine(map, x1,y1,x2,y2);
         }
@@ -180,34 +205,26 @@ void parts() {
             diagRestVentLine(map,x1,y1,x2,y2);
         }
     }
-    //
 
-    
     fstream fout;
-    fout.open("map.csv", ios::out);
-    
-    //P2
-    count = 0;
-    //
-    for(int j = 0; j < SIZE; j++){
-        for(int i = 0; i < SIZE; i++){
-            if(map[i][j] == 0) fout << " .";
-            else fout << " " << map[i][j];
-
-            //P2
-            if(map[i][j] > 1) count++;
-            //
+    if(!fout.fail()){
+        fout.open("map.csv", ios::out);
+        int count = 0;
+        for(int j = 0; j < SIZE; j++){
+            for(int i = 0; i < SIZE; i++){
+                if(map[i][j] == 0) fout << " .";
+                else fout << " " << map[i][j];
+                if(map[i][j] > 1) count++;
+            }
+            fout << endl;
         }
-        fout << endl;
-    }
-    fout.close();
-    
-    //P2
-    cout << "part2: " << count << endl;
-    //
+        fout.close();
+        cout << "part2: " << count << endl;
+    }else return;
 }
 
 int main(){
-    parts();
+    part1();
+    part2();
     return 0;
 }
