@@ -7,7 +7,7 @@ using namespace std;
 
 // NOTE:
 // - It creates a map.csv file
-// - SIZE value is 10 for sample input (which is input1.txt)
+// - SIZE value is 10 for sample input (which is "./input1.txt")
 // - INPUT: path to desired input
 
 #define SIZE 1000
