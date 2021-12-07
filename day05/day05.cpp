@@ -139,7 +139,7 @@ void parts() {
     }
 
     memset(&map,0,sizeof(int)*SIZE*SIZE);
-    int i = 0;
+    
     for(Ventline v : ventlines){
         int x1 = v.start().getX();
         int y1 = v.start().getY();
