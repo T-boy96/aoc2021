@@ -129,8 +129,6 @@ void part2() {
                     s.pop();
                 }
             }
-        }
-        if(completionString.size() > 0){
             long long int result = 0;
             for(char c : completionString){
                 result *= 5;
